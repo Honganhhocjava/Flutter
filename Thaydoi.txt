@@ -9,4 +9,7 @@ B3
 C
 
 C1
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
