@@ -3,4 +3,10 @@ B
 B1
 a
 A
+<<<<<<< Updated upstream
 B3
+=======
+C
+
+C1
+>>>>>>> Stashed changes
