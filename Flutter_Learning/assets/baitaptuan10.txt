@@ -1,0 +1,114 @@
+-- Tìm các nhân viên làm việc ở phòng số 4 
+DELIMITER $$
+CREATE PROCEDURE ten( IN phong INT(11))
+BEGIN
+    SELECT TENNV
+    FROM nhanvien
+    WHERE PHG = phong;
+END $$
+DELIMITER ;
+
+CALL ten(4);
+
+-- Tìm các nhân viên mức lương lớn hơn 30000
+DELIMITER $$
+DROP PROCEDURE IF EXISTS tienluongnv $$
+CREATE PROCEDURE tienluongnv( IN luongnv double)
+BEGIN
+    SELECT TENNV
+    FROM nhanvien
+    WHERE LUONG > luongnv ;
+END $$
+DELIMITER ;
+
+CALL tienluongnv(30000);
+
+-- Tìm các nhân viên có mức lương trên 25,000 ở phòng 4 hoặc các nhân viên có mức lương trên 30,000 ở phòng 5
+DELIMITER $$
+DROP PROCEDURE IF EXISTS tienluong $$
+CREATE PROCEDURE tienluong( IN mucluong1 double , IN phongnv1 INT(11) , IN mucluong2 double , IN phongnv2 INT(11) )
+BEGIN
+    SELECT TENNV
+    FROM nhanvien
+    WHERE LUONG > mucluong1 AND PHG = phongnv1 OR LUONG > mucluong2 AND PHG = phongnv2 ;
+END $$
+DELIMITER ;
+
+CALL tienluong(25000,4,30000,5);
+ -- Cho biết họ tên đầy đủ của các nhân viên ở Tp HCM
+DELIMITER $$
+DROP PROCEDURE IF EXISTS hodc $$
+CREATE PROCEDURE hodc(IN dc varchar(30))
+BEGIN
+    SELECT concat(HONV , " " , TENLOT , " " , TENNV ) AS HoTenNv
+    FROM nhanvien
+    WHERE DIACHI LIKE dc ;
+END $$
+DELIMITER ;
+
+CALL hodc("%Tp HCM");
+
+-- Cho biết họ tên đầy đủ của các nhân viên có họ bắt đầu bằng ký tự ‘N’
+DELIMITER $$
+DROP PROCEDURE IF EXISTS ho $$
+CREATE PROCEDURE ho(IN ho1 varchar(15))
+BEGIN
+    SELECT concat(HONV , " " , TENLOT , " " , TENNV ) AS HoTenNv
+    FROM nhanvien
+    WHERE HONV LIKE ho1 ;
+END $$
+DELIMITER ;
+
+CALL ho("N%");
+
+-- Cho biết ngày sinh và địa chỉ của nhân viên Dinh Ba Tien
+DELIMITER $$
+DROP PROCEDURE IF EXISTS tenDinhBaTien $$
+CREATE PROCEDURE tenDinhBaTien(IN hod varchar(15),IN tenlotb varchar(15),IN tennvT varchar(15))
+BEGIN
+    SELECT NGSINH , DIACHI
+    FROM nhanvien
+    WHERE HONV LIKE hod AND TENLOT LIKE tenlotb AND TENNV LIKE tennvT  ;
+END $$
+DELIMITER ;
+
+CALL tenDinhBaTien("Đinh","Bá","Tiên");
+
+-- Cho biết các nhân viên có năm sinh trong khoảng 1960 đến 1965
+DELIMITER $$
+DROP PROCEDURE IF EXISTS nsinh $$
+CREATE PROCEDURE nsinh(IN ns1 Year , IN ns2 YEAR)
+BEGIN
+	SELECT concat(HONV , " " , TENLOT , " " , TENNV ) as Hoten
+    FROM nhanvien
+    WHERE YEAR(NGSINH) BETWEEN ns1 AND ns2 ; 
+END $$
+DELIMITER ;
+Call nsinh(1960,1965);
+
+-- Cho biết các nhân viên và năm sinh của nhân viên
+DELIMITER $$
+DROP PROCEDURE IF EXISTS nvns $$
+CREATE PROCEDURE nvns()
+BEGIN
+	SELECT concat(HONV , " " , TENLOT , " " , TENNV ) as Hoten , YEAR(NGSINH)
+    FROM nhanvien;
+END $$
+DELIMITER ;
+
+CALL nvns();
+
+-- Cho biết các nhân viên và tuổi của nhân viên
+DELIMITER $$
+DROP PROCEDURE IF EXISTS nvtuoi $$
+CREATE PROCEDURE nvtuoi()
+BEGIN
+	SELECT concat(HONV , " " , TENLOT , " " , TENNV ) as Hoten ,  YEAR(CURDATE()) - YEAR(NGSINH) as Tuoi
+
+    FROM nhanvien;
+END $$
+DELIMITER ;
+
+CALL nvtuoi();
+
+
